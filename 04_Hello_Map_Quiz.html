@@ -1,25 +1,16 @@
+<!-- This is the corresponding "starter code" for 04_Hello Map in Udacity and Google's Maps
+API Course, Lesson 1 -->
 <html>
-  <head>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    
-    <div class="container">
+ <head>
+ <!-- styles put here, but you can include a CSS file and reference it instead! -->
+   <style type="text/css">
+     html, body { height: 100%; margin: 0; padding: 0; }
+     #map { height: 100%; }
+   </style>
+
+ </head>
+ <body>
+ <div class="container">
       <div class="options-box">
       <h1> Find Your New York Home</h1>
        <div>
@@ -27,65 +18,69 @@
          <input id="hide-listings" type="button" value="Hide Listings">
        </div>
       </div>
-      <div id="map"></div>
-      
-    </div>
-    <script>
-      var map;
-      var markers = [];
+ 
+   <div id="map"></div>
 
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          // center: {lat: 40.7413549, lng: -73.9980244},
-             center: {lat: 24.782661, lng: 46.629109},
-          zoom: 13
-
-        });
-        //var tribeca = {lat:40.719526, lng: -74.0089934};
-        //
-        //var uluru ={lat: 24.783495, lng: 46.621242};
-        //var marker = new google.maps.Marker({
-         // position: uluru,
-          //map: map,
-          //content: 'First Marker!'
-        //});
-        var infowindow = new google.maps.InfoWindow({
-         // content:'hfhrgfh'
-         // The following group uses the location array to create marker.
-         for  (var i =0 ; i < locations.length; i++){
-          // get the position from the location array
-          var position = locations[i].location;
-          var title = locations[i].title;
-          //create a marker per loction , and put into markers array
-          var marker = new google.maps.Marker({
-            map: map,
-            position: position,
-            title: title,
-            animation: google.maps.animation.DROP,
-            id: i
+   <script>
+    
+     var map = [] ;
+       function initMap() {
+         var map = new google.maps.Map(document.getElementById('map'), {
+           center: {lat: 24.782661, lng: 46.629109},
+            zoom: 8
           });
-          // push the marker to our array of markers
-          markers.push(marker);
-          marker.addListener('click', function(){
-            populateInfoWindow(this, largeInfowindow);
-          })
-         }
-       //});
-         marker.addListener('click',function(){
-         infowindow.open(map, marker);
-        //});
+        
+     var locations = [
+       {title:'Starbucks' ,location: {lat: 24.807972, lng: 46.615403}},
+       {title:'King Saud University' ,location: {lat: 24.807018, lng: 46.615768}},
+       {title:'TCS Officis' ,location: {lat: 24.800887, lng: 46.611532}}
+     ];
+// var infowindow = new google.maps.InfoWindow();
+var i  ;
+var largeInfowindow = new google.maps.InfoWindow();
+var bounds = new google.maps.LatLngBounds();
 
-        //marker.setMap(null);
-       // document.getElementById('show-listings').addEventListener('click',showListings);
-       // document.getElementById('hide-listings').addEventListener('click',hideListings);
-      }
-      var location = [
-      {title: 'TSC Office', location: { lat:24.808912  , lng:46.755248}},
-      {title: 'Starbucks', location: { lat:24.817426   , lng:46.735366}},
-      {title: 'Starbucks', location: { lat:24.806418   , lng:46.738736}}
-      ];
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwQymyKAB-mweljBL6Omk0nvZSap0Ml9Y&callback=initMap"
-    async defer></script>
-  </body>
+                
+      // for (i ; i<locations.length ; i++)
+      for (i = 0; i < locations.length; i++)
+      {
+        var position = locations[i].location;
+          var title = locations[i].title;
+          var marker = new google.maps.Marker({
+                  map: map ,
+                  position: position,
+                  title:title,
+                  animation:google.maps.Animation.DROP,
+                  id:i
+                });
+          var markers =[];
+          markers.push(marker);
+          bounds.extend(marker.position);
+          marker.addListener('click',function() {
+          populateInfoWindow(this,largeInfowindow);
+     // infowindow.open(map ,marker);
+                     });
+  }
+  function populateInfoWindow (marker,infowindow ){
+if (infowindow.marker !=marker){
+  infowindow.marker = marker;
+  infowindow.setContent('<div>' + marker.title + '</div>');
+  infowindow.open(map , marker);
+  marker.addListener('closeclick',function(){
+  infowindow.setMarker(null);
+// infowindow.open(map ,marker);
+             });
+ }
+}
+  }
+  //end loop
+      
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8TEl-S7oIufePwstuOnIToy3ZtRPYmAI&callback=initMap"
+      async defer></script>
+  //  </script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8TEl-S7oIufePwstuOnIToy3ZtRPYmAI&callback=initMap"
+  //     async defer>
+
+
+ </body>
 </html>
